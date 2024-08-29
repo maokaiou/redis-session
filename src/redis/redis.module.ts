@@ -6,10 +6,15 @@ import { createClient } from 'redis';
   providers: [
     RedisService,
     {
-      provide: 'REDIUS_CLIENT',
-      useFactory: async () => {
-        const client = await createClient().connect();
-        console.log('client', client);
+      provide: 'REDIS_CLIENT',
+      async useFactory() {
+        const client = createClient({
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        });
+        await client.connect();
         return client;
       },
     },
